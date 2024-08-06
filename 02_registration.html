@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 80%;
+            max-width: 1200px;
+            height: 80vh;
+        }
+
+        .registration-container {
+            background-color: #3528dc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .registration-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .registration-container .form-group {
+            margin-bottom: 15px;
+        }
+
+        .registration-container .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .registration-container .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .registration-container .form-group input:invalid {
+            border-color: red;
+        }
+
+        .registration-container .form-group input:valid {
+            border-color: green;
+        }
+
+        .registration-container .form-group .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .registration-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff6200;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .registration-container button:hover {
+            background-color: #e55b00;
+        }
+
+        .image-container {
+            width: 50%;
+            background-image: url('./assets/img_1.jpg'); /* Replace with your image path */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="registration-container">
+            <h2>User Registration</h2>
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <div class="error-message" id="firstNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <div class="error-message" id="lastNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        <div class="image-container"></div>
+    </div>
+
+    <script src="./common/script.js"></script>
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            let isValid = true;
+
+            // First Name validation
+            const firstNameInput = document.getElementById('firstName');
+            const firstNameError = document.getElementById('firstNameError');
+            if (firstNameInput.value.trim() === '') {
+                firstNameError.textContent = 'Please enter your first name.';
+                isValid = false;
+            } else {
+                firstNameError.textContent = '';
+            }
+
+            // Last Name validation
+            const lastNameInput = document.getElementById('lastName');
+            const lastNameError = document.getElementById('lastNameError');
+            if (lastNameInput.value.trim() === '') {
+                lastNameError.textContent = 'Please enter your last name.';
+                isValid = false;
+            } else {
+                lastNameError.textContent = '';
+            }
+
+            // Email validation
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            if (!emailInput.validity.valid) {
+                emailError.textContent = 'Please enter a valid email address.';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            // Password validation
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('passwordError');
+            const uppercaseRegex = /[A-Z]/;
+            const numberRegex = /[0-9]/;
+            let passwordErrors = [];
+
+            if (passwordInput.value.trim() === '') {
+                passwordErrors.push('Please enter a password.');
+            }
+            if (passwordInput.value.length < 6) {
+                passwordErrors.push('Password must be at least 6 characters long.');
+            }
+            if (!uppercaseRegex.test(passwordInput.value)) {
+                passwordErrors.push('Password must contain at least one uppercase letter.');
+            }
+            if (!numberRegex.test(passwordInput.value)) {
+                passwordErrors.push('Password must contain at least one number.');
+            }
+
+            if (passwordErrors.length > 0) {
+                passwordError.textContent = passwordErrors.join(' ');
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (isValid) {
+                setDataToLocalStorage(firstNameInput.value, lastNameInput.value, emailInput.value, passwordInput.value);
+                alert('Registration Successful!');
+                window.location.href = '03_home.html'; // Redirect to the desired page
+            }
+        });
+    </script>
+</body>
+
+</html>
